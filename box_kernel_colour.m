@@ -1,12 +1,15 @@
-function output_kernel = box_kernel_colour(size)
+function output_kernel = box_kernel_colour(size, depth)
 
 if nargin < 2
     depth = 1;
 end
 
-output_kernel_comp = ones(25);
-output_kernel_comp = output_kernel_comp / (sum(output_kernel_comp(:)));
-output_kernel = cat(3, output_kernel_comp, output_kernel_comp, output_kernel_comp);
+box_kernel = ones(size, size, depth);
+for idx = 1:depth
+    slice_sum = sum(sum(box_kernel(:, :, idx)));
+    box_kernel(:,:,idx) = box_kernel(:, :, idx) ./ slice_sum;
+end
 
+output_kernel = box_kernel;
 end
 
